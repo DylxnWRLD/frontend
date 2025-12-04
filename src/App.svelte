@@ -6,13 +6,13 @@
     import ListadoPedidos from "./lib/components/views/ListadoPedidos.svelte";
 
     const routes = {
-        "/": Home,
-        "/login": Login,
+        "/": Login,
+        "/home": Home,
         "/pedidos": ListadoPedidos,
         "*": Login
     };
 </script>
 
 <main>
-    <Router {routes} />
+    <Router {routes} useHash={true} />
 </main>

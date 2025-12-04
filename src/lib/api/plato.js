@@ -12,23 +12,18 @@ export async function getPlatosDisponibles() {
         const response = await fetch(`${BASE_URL}/disponibles`, {
             method: 'GET',
             headers: {
-                // Aquí podrías añadir el Token de Autorización si fuera necesario
                 'Content-Type': 'application/json'
             }
         });
 
         if (!response.ok) {
-            // Lanza un error si la respuesta HTTP no es 2xx
             const errorBody = await response.json();
             throw new Error(`Error ${response.status}: ${errorBody.message || 'Error al obtener platos'}`);
         }
-
-        // Devuelve el array de platos
         return await response.json();
 
     } catch (error) {
         console.error("Error en la conexión con el backend de platos:", error);
-        // Propaga el error para que el componente Svelte lo maneje
         throw error;
     }
 }
