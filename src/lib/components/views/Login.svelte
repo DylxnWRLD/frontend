@@ -1,6 +1,6 @@
 <script>
     import { registrarUsuario, loginUsuario, logout, getToken } from '../../api/usuario.js';
-    import { push } from 'svelte-spa-router'; // esto permite redirigir
+    import { push } from 'svelte-spa-router'; 
 
     let isLoginMode = true;
     let email = '';
@@ -10,7 +10,7 @@
     let message = '';
     let error = '';
 
-    $: formTitle = isLoginMode ? 'Ingresar a la casita' : 'Crear Cuenta';
+    $: formTitle = isLoginMode ? 'Inicio de Sesión' : 'Crear Cuenta';
 
     async function handleSubmit() {
         error = '';
@@ -23,9 +23,7 @@
                 message = `¡Bienvenido, ${user.nombre}!`;
                 email = '';
                 password = '';
-                
-                // Redirigir a Home.svelte
-                push('/home'); // aquí '/home' debe coincidir con la ruta en tu router
+                push('/home'); 
             } catch (err) {
                 error = 'Error al iniciar sesión: ' + err.message;
             }
@@ -61,7 +59,7 @@
 </script>
 
 {#if getToken()}
-    <p>Usuario logueado ✅</p>
+    <p>Usuario logueado</p>
     <button on:click={handleLogout}>Cerrar sesión</button>
 {:else}
     <div class="auth-wrapper">
@@ -83,3 +81,71 @@
         </button>
     </div>
 {/if}
+
+<style>
+   .auth-wrapper {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 30px;
+    border: 1px solid #4890ad;
+    border-radius: 8px;
+    background-color: #f0f2f7;
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #2400f2;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input {
+    padding: 15px;
+    border: 1px solid #0c0c0c;
+    border-radius: 4px;
+    background-color: #f4f3f3;
+    color: #0f0f0f; 
+    transition: border-color 0.2s;
+}
+
+button {
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #051c35;
+    color: white;
+    cursor: pointer;
+}
+
+.auth-wrapper > button:last-of-type {
+    display: block;         
+    margin: 15px auto 0 auto; 
+    background-color: #0b2a46;
+}
+
+
+.message {
+    background-color: #28a745cc;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    color: #fff;
+}
+
+.error {
+    background-color: #dc3545cc; 
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    color: #fff;
+}
+
+
+</style>

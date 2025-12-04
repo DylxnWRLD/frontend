@@ -1,6 +1,6 @@
 <script>
-    import { getPlatosDisponibles } from '../../api/plato.js';
-    import { onMount } from 'svelte';
+    import { getPlatosDisponibles } from "../../api/plato.js";
+    import { onMount } from "svelte";
 
     let platos = [];
     let loading = true;
@@ -13,7 +13,8 @@
         try {
             platos = await getPlatosDisponibles();
         } catch (e) {
-            error = "No se pudo conectar al servidor de menú. Asegúrate que Spring Boot esté corriendo en el puerto 8080.";
+            error =
+                "No se pudo conectar al servidor de menú. Asegúrate que Spring Boot esté corriendo en el puerto 8080.";
             console.error("Error al cargar platos:", e);
         } finally {
             loading = false;
@@ -25,12 +26,12 @@
     });
 </script>
 
-<h1>🌮 Catálogo de Platos</h1>
+<h1>Catálogo de Platos</h1>
 
 {#if loading}
     <p>Cargando menú desde el servidor...</p>
 {:else if error}
-    <p style="color: red; font-weight: bold;">🛑 ERROR DE CONEXIÓN: {error}</p>
+    <p style="color: red; font-weight: bold;">ERROR DE CONEXIÓN: {error}</p>
 {:else if platos.length === 0}
     <p>No hay platos disponibles en este momento.</p>
 {:else}
@@ -40,7 +41,7 @@
                 <h3>{plato.nombre}</h3>
                 <p>{plato.descripcion}</p>
                 <p class="precio">Precio: ${plato.precioBase.toFixed(2)}</p>
-                <button>Añadir al Carrito</button>
+                <button>Añadir al carrito</button>
             </div>
         {/each}
     </div>
@@ -54,15 +55,25 @@
         padding: 20px;
     }
     .plato-card {
-        border: 1px solid #444;
+        border: 1px solid #000000;
         border-radius: 8px;
         padding: 15px;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-        background-color: #2a2a2a;
+        background-color: #f5f5f5;
     }
     .precio {
         font-size: 1.2em;
         font-weight: bold;
-        color: #ffaa00; 
+        color: #ffaa00;
+    }
+    
+    
+    button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
     }
 </style>

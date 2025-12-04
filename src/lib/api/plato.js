@@ -1,11 +1,11 @@
 // src/lib/api/plato.js
 
-const BASE_URL = 'http://localhost:8080/api/platos'; // URL base de tu backend
+const BASE_URL = 'http://localhost:8080/api/platos';
 
 /**
  * Obtiene la lista de platos que están marcados como disponibles.
  * Endpoint: GET http://localhost:8080/api/platos/disponibles
- * @returns {Promise<Array>} Una promesa que resuelve con la lista de platos.
+ * @returns {Promise<Array>}
  */
 export async function getPlatosDisponibles() {
     try {

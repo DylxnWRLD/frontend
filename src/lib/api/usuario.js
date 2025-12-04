@@ -39,19 +39,14 @@ export async function loginUsuario(credentials) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(credentials)
         });
-
         if (!res.ok) {
             const errorBody = await res.json();
             throw new Error(errorBody.message || 'Error en login');
         }
-
         const data = await res.json();
-
-        // Aquí asumimos que tu backend devuelve un campo "token"
         if (data.token) {
             localStorage.setItem('token', data.token);
         }
-
         return data;
     } catch (err) {
         console.error('Error en login:', err);
