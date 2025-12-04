@@ -1,16 +1,15 @@
 <script>
-    import Router from 'svelte-spa-router';
-    import Home from './lib/components/views/Home.svelte';
-    
-    // Importa los nuevos componentes:
-    import Login from './lib/components/views/Login.svelte';
-    import ListadoPedidos from './lib/components/views/ListadoPedidos.svelte';
+    import Router from "svelte-spa-router";
+
+    import Login from "./lib/components/views/Login.svelte";
+    import Home from "./lib/components/views/Home.svelte";
+    import ListadoPedidos from "./lib/components/views/ListadoPedidos.svelte";
 
     const routes = {
-        '/': Home,
-        '/pedidos': ListadoPedidos,  
-        '/login': Login,              
-        '*': Home 
+        "/": Home,
+        "/login": Login,
+        "/pedidos": ListadoPedidos,
+        "*": Login
     };
 </script>
 

@@ -1,23 +1,19 @@
-// jsconfig.json (Versión Corregida)
-
 {
   "compilerOptions": {
     "module": "ESNext",
-    "moduleResolution": "nodenext", 
     "target": "ESNext",
-    "jsx": "preserve",
+    "moduleResolution": "bundler",
     "allowJs": true,
     "checkJs": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "isolatedModules": true,
-    // Asegura que VS Code reconozca la ruta $lib
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
     "paths": {
       "$lib": ["./src/lib"],
       "$lib/*": ["./src/lib/*"]
     }
   },
-  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte"]
+  "include": ["src/**/*.js", "src/**/*.svelte"]
 }

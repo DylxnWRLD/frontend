@@ -1,15 +1,17 @@
 <script>
-   import { getPlatosDisponibles } from '../../api/plato.js';
+    import { getPlatosDisponibles } from '../../api/plato.js';
+    import { onMount } from 'svelte';
 
-    let platos = []; 
+    let platos = [];
     let loading = true;
     let error = null;
 
     async function cargarPlatos() {
         loading = true;
         error = null;
+
         try {
-            platos = await getPlatosDisponibles(); 
+            platos = await getPlatosDisponibles();
         } catch (e) {
             error = "No se pudo conectar al servidor de menú. Asegúrate que Spring Boot esté corriendo en el puerto 8080.";
             console.error("Error al cargar platos:", e);
@@ -17,10 +19,13 @@
             loading = false;
         }
     }
-    cargarPlatos();
+
+    onMount(() => {
+        cargarPlatos();
+    });
 </script>
 
-<h1>🌮 Catálogo de Platos (Ruta: /)</h1>
+<h1>🌮 Catálogo de Platos</h1>
 
 {#if loading}
     <p>Cargando menú desde el servidor...</p>

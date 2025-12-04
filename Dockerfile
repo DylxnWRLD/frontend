@@ -1,21 +1,25 @@
-# ETAPA ÚNICA: DESARROLLO (usando Vite/Node)
-# Usamos node:20 como base para instalar y correr el proyecto Svelte
-FROM node:20
-WORKDIR /app
+# Dockerfile dentro del directorio 'frontend'
+FROM alpine:latest
 
-# Copiamos archivos de dependencias
+# Instalar Node.js y npm
+RUN apk update && \
+    apk add --no-cache nodejs npm git
+
+# Directorio donde se montará el proyecto
+WORKDIR /app-source
+
+# Copiar package.json para instalar dependencias (solo para caché)
 COPY package*.json ./
-# Instalamos dependencias
+
+# Instalar dependencias (se reutilizan si se montan desde host)
 RUN npm install
 
-# Copiamos todo el código fuente. Esto es importante para que el Bind Mount funcione,
-# aunque el Bind Mount sobrescribirá esta copia en tiempo de ejecución.
+# Copiar código (solo sirve si NO usas bind mount, en dev se sobrescribe)
 COPY . .
 
-# EXPOSE 5173 es el puerto por defecto de Vite/Svelte
+# Exponer puertos de Vite
 EXPOSE 5173
+EXPOSE 24678
 
-# CMD ejecuta el servidor de desarrollo de Vite:
-# --host 0.0.0.0 es crucial para que sea accesible fuera del contenedor.
-# --port 5173 es el puerto donde escucha internamente.
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
+# Comando de desarrollo
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
