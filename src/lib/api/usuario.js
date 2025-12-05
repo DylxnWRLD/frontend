@@ -1,6 +1,7 @@
 // src/lib/api/usuario.js
 
-const BASE_URL = 'http://localhost:8080/api/usuarios';
+const BASE_URL = 'https://backend-production-12f1.up.railway.app/api/usuarios';
+// const BASE_URL = 'http://localhost:8080/api/usuarios';
 
 /**
  * Registra un nuevo usuario
