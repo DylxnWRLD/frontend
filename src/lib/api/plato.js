@@ -1,6 +1,6 @@
 // src/lib/api/plato.js
 
-const BASE_URL = 'https://backend-production-12f1.up.railway.app/api/usuarios';
+const BASE_URL = 'https://backend-production-12f1.up.railway.app/api/platos';
 //const BASE_URL = 'http://localhost:8080/api/platos';
 
 /**
