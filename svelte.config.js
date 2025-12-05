@@ -1,8 +1,13 @@
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 
-export default {
-  preprocess: vitePreprocess(),
-  compilerOptions: {
-    dev: true
-  }
-};
+const base = process.env.NODE_ENV === 'production' ? '/frontend/' : '/';
+
+export default defineConfig({
+  plugins: [svelte()],
+  base: base, 
+  
+  build: {
+    outDir: 'dist',
+  },
+});
