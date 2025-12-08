@@ -1,18 +1,12 @@
 CÓMO CORRER EN LOCAL
 -
 1. Crear una carpeta raíz con el nombre de Proyecto.
-2. Dentro crear las carpetas de frontend y backend.
+2. Dentro crear las carpeta de frontend.
 3. Clonar los repositorios en la respectiva carpeta:
-	- Para backend: git clone https://github.com/DylxnWRLD/backend
 	- Para frontend: git clone https://github.com/DylxnWRLD/frontend
-
-En la carpeta del back:
--
-	./mvnw clean package -DskipTests
 
 Estando en la carpeta de raíz para que pueda encontrar el Dockerfile:
 -
-	docker build -t app-backend ./backend
 	docker build -t app-frontend ./frontend
 
 Estando en la carpeta de frontend:
@@ -27,30 +21,6 @@ Estando en el directorio raíz:
 NOTA: CAMBIAR LA DIRECCIÓN DEL VOLUMEN POR LA DE USTEDES.
 Ejecutar en este orden:
 -
-
-BASE DE DATOS:
--
-    docker run -d \
-      --name mariadb_db \
-      --restart always \
-      -p 3307:3306 \
-      -e MARIADB_ROOT_PASSWORD=123 \
-      -e MARIADB_DATABASE=restaurante_db \
-      -e MARIADB_USER=listi \
-      -e MARIADB_PASSWORD=123 \
-      -v db_data:/var/lib/mysql \
-      mariadb:10.6
-
-PARA EL BACKEND:
--
-    docker run -it --rm \
-      --name spring_backend_dev \
-      -p 8080:8080 \
-      -e SPRING_DATASOURCE_URL=jdbc:mariadb://host.docker.internal:3307/restaurante_db \
-      -e SPRING_DATASOURCE_USERNAME=listi \
-      -e SPRING_DATASOURCE_PASSWORD=123 \
-      app-backend
-
 
 PARA EL FRONTEND:
 La primera vez:
@@ -83,71 +53,74 @@ Las demás veces:
 Probar en el navegador con:
 - 
     http://localhost:5173/
-    http://localhost:8080/api/prueba/estado
 
 
   CÓMO DESPLEGARLO
-  -
+  - 
+  1. Primero debemos de crear un .yml para desplegar con GitHub. El contenido del mismo es el siguiente:
+     -
+	name: Deploy Svelte SPA to GitHub Pages
+		on:
+	 	 push:
+	  	  branches: ["main"]
+
+	permissions:
+	  contents: read
+ 	 pages: write
+ 	 id-token: write
+
+	jobs:
+  	build:
+   	 runs-on: ubuntu-latest
+   	 steps:
+   	   - uses: actions/checkout@v4
+
+     	 - uses: actions/setup-node@v4
+     	   with:
+      	    node-version: 20
+       	   cache: npm
+
+    	  - name: Install dependencies
+    	    run: npm install
+
+    	  - name: Build project
+    	    run: npm run build
+
+    	  - uses: actions/configure-pages@v5
+
+    	  - name: Upload artifact
+     	   uses: actions/upload-pages-artifact@v3
+     	   with:
+      	    path: dist
+
+  		deploy:
+    		needs: build
+    		runs-on: ubuntu-latest
+    		environment:
+      		name: github-pages
+      		url: ${{ steps.deployment.outputs.page_url }}
+   		 steps:
+    		- name: Deploy to GitHub Pages
+     	  	 id: deployment
+      	 	 uses: actions/deploy-pages@v4
+
+Debemos de hacer cambio de URL en los archivos de la carpeta src/lib/api/ se pone la URL que se obtiene desde Railway en vez de la de localhost.
+-
+
+
+Luego simplemente hacemos desde bash:
+-
+	git add .
+	git commit -m "Despliegue del front"
+	git push
+
+Esperamos unos 3 minnutos y podremos acceder para observar el front:
+-
+	https://dylxnwrld.github.io/frontend/
 
 
 
 
-
-
-
-
-
-
-
-
-
-  EJEMPLOS DE CURL
-  -
-
-  Para los usuarios
-  -
-    curl -X POST \
-    http://localhost:8080/api/usuarios/registro \
-    -H "Content-Type: application/json" \
-    -d '{
-    "nombre": "Pedro",
-    "email": "pedro@gmail.com",
-    "password": "123"
-    }'
-
-    curl -X POST \
-    http://localhost:8080/api/usuarios/registro \
-    -H "Content-Type: application/json" \
-    -d '{
-    "nombre": "Juan",
-    "email": "juan@gmail.com",
-    "password": "123"
-    }'
-
-  Para los platos del restaurante:
-  -
-    curl -X POST \
-    http://localhost:8080/api/platos \
-    -H "Content-Type: application/json" \
-    -d '{
-      "nombre": "Huevo con Jamón",
-      "descripcion": "Delicioso desayuno de huevo y jamón",
-      "precioBase": 50.00,
-      "disponible": true
-    }'
-
-    curl -X POST \
-    http://localhost:8080/api/platos \
-    -H "Content-Type: application/json" \
-    -d '{
-      "nombre": "Chilaquiles",
-      "descripcion": "Delicioso desayuno",
-      "precioBase": 100.00,
-      "disponible": true
-    }'
-
-    curl -X GET \
-    http://localhost:8080/api/platos/disponibles
 
     
   
