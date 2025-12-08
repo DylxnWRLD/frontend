@@ -1,43 +1,154 @@
-# Svelte + Vite
+CÓMO CORRER EN LOCAL
+-
+1. Crear una carpeta raíz con el nombre de Proyecto.
+2. Dentro crear las carpetas de frontend y backend.
+3. Clonar los repositorios en la respectiva carpeta:
+	- Para backend: git clone https://github.com/DylxnWRLD/backend
+	- Para frontend: git clone https://github.com/DylxnWRLD/frontend
 
-This template should help get you started developing with Svelte in Vite.
+En la carpeta del back:
+-
+	./mvnw clean package -DskipTests
 
-## Recommended IDE Setup
+Estando en la carpeta de raíz para que pueda encontrar el Dockerfile:
+-
+	docker build -t app-backend ./backend
+	docker build -t app-frontend ./frontend
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+Estando en la carpeta de frontend:
+-
+	rm -rf node_modules package-lock.json
+	npm install svelte-spa-router
+	npm install svelte@4 --legacy-peer-deps
+	npm install
 
-## Need an official Svelte framework?
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+Estando en el directorio raíz:
+NOTA: CAMBIAR LA DIRECCIÓN DEL VOLUMEN POR LA DE USTEDES.
+Ejecutar en este orden:
+-
 
-## Technical considerations
+BASE DE DATOS:
+-
+    docker run -d \
+      --name mariadb_db \
+      --restart always \
+      -p 3307:3306 \
+      -e MARIADB_ROOT_PASSWORD=123 \
+      -e MARIADB_DATABASE=restaurante_db \
+      -e MARIADB_USER=listi \
+      -e MARIADB_PASSWORD=123 \
+      -v db_data:/var/lib/mysql \
+      mariadb:10.6
 
-**Why use this over SvelteKit?**
+PARA EL BACKEND:
+-
+    docker run -it --rm \
+      --name spring_backend_dev \
+      -p 8080:8080 \
+      -e SPRING_DATASOURCE_URL=jdbc:mariadb://host.docker.internal:3307/restaurante_db \
+      -e SPRING_DATASOURCE_USERNAME=listi \
+      -e SPRING_DATASOURCE_PASSWORD=123 \
+      app-backend
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
 
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+PARA EL FRONTEND:
+La primera vez:
+-
+    docker run -it --rm \
+      --name svelte_frontend_dev \
+      -p 5173:5173 \
+      -p 24678:24678 \
+      -e VITE_API_URL=http://host.docker.internal:8080/api \
+      -v "C:\Users\laura\Proyecto Restaurante\frontend":/app-source \
+      app-frontend sh
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+Y luego:
+-
+    cd /app-source
+    npm install
+    npm run dev -- --host 0.0.0.0
 
-**Why include `.vscode/extensions.json`?**
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+Las demás veces:
+-
+     docker run -it --rm \
+      --name svelte_frontend_dev \
+      -p 5173:5173 \
+      -p 24678:24678 \
+      -e VITE_API_URL=http://host.docker.internal:8080/api \
+      -v "C:\Users\laura\Proyecto Restaurante\frontend":/app-source \
+      app-frontend
 
-**Why enable `checkJs` in the JS template?**
+Probar en el navegador con:
+- 
+    http://localhost:5173/
+    http://localhost:8080/api/prueba/estado
 
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
 
-**Why is HMR not preserving my local component state?**
+  CÓMO DESPLEGARLO
+  -
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
 
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+
+
+
+
+
+
+
+
+
+
+  EJEMPLOS DE CURL
+  -
+
+  Para los usuarios
+  -
+    curl -X POST \
+    http://localhost:8080/api/usuarios/registro \
+    -H "Content-Type: application/json" \
+    -d '{
+    "nombre": "Pedro",
+    "email": "pedro@gmail.com",
+    "password": "123"
+    }'
+
+    curl -X POST \
+    http://localhost:8080/api/usuarios/registro \
+    -H "Content-Type: application/json" \
+    -d '{
+    "nombre": "Juan",
+    "email": "juan@gmail.com",
+    "password": "123"
+    }'
+
+  Para los platos del restaurante:
+  -
+    curl -X POST \
+    http://localhost:8080/api/platos \
+    -H "Content-Type: application/json" \
+    -d '{
+      "nombre": "Huevo con Jamón",
+      "descripcion": "Delicioso desayuno de huevo y jamón",
+      "precioBase": 50.00,
+      "disponible": true
+    }'
+
+    curl -X POST \
+    http://localhost:8080/api/platos \
+    -H "Content-Type: application/json" \
+    -d '{
+      "nombre": "Chilaquiles",
+      "descripcion": "Delicioso desayuno",
+      "precioBase": 100.00,
+      "disponible": true
+    }'
+
+    curl -X GET \
+    http://localhost:8080/api/platos/disponibles
+
+    
+  
+
