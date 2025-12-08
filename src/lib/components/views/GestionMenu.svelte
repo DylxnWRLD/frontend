@@ -60,6 +60,9 @@
 </script>
 
 <div class="contenedor-admin">
+    <div class="navigation-header">
+        <a href="#/home" class="btn-back-home">Menú</a>
+    </div>
     <h2>Gestión de Menú (Acceso Total)</h2>
 
     <div class="panel-formulario">
@@ -67,7 +70,11 @@
         <input type="text" placeholder="Nombre del plato" bind:value={formPlato.nombre} />
         <textarea placeholder="Descripción" bind:value={formPlato.descripcion}></textarea>
         <div class="fila">
-            <input type="number" placeholder="Precio" step="0.50" bind:value={formPlato.precioBase} />
+            <label >
+                precio $$
+                <input type="number" placeholder="Precio" step="0.50" bind:value={formPlato.precioBase} />
+            </label>
+            
             <label>
                 <input type="checkbox" bind:checked={formPlato.disponible} />
                 Disponible para venta
@@ -78,9 +85,9 @@
             <button class="btn-guardar" on:click={guardar}>
                 {modoEdicion ? 'Guardar Cambios' : 'Crear Plato'}
             </button>
-            {#if modoEdicion}
-                <button class="btn-cancelar" on:click={limpiarFormulario}>Cancelar</button>
-            {/if}
+        
+            <button class="btn-cancelar" on:click={limpiarFormulario}>Cancelar</button>
+            
         </div>
     </div>
 
@@ -106,8 +113,8 @@
                             {plato.disponible ? '🟢 Disponible' : '🔴 Agotado'}
                         </td>
                         <td>
-                            <button class="btn-editar" on:click={() => editar(plato)}>✏️ Editar</button>
-                            <button class="btn-borrar" on:click={() => borrar(plato.id)}>🗑️ Borrar</button>
+                            <button class="btn-editar" on:click={() => editar(plato)}>Editar</button>
+                            <button class="btn-borrar" on:click={() => borrar(plato.id)}>Borrar</button>
                         </td>
                     </tr>
                 {/each}
@@ -137,4 +144,26 @@
     
     .btn-editar { background-color: #ffc107; color: #333; margin-right: 5px; }
     .btn-borrar { background-color: #dc3545; color: white; }
+
+    .navigation-header {
+        margin-bottom: 20px;
+        text-align: right;
+    }
+    
+    .btn-back-home {
+        background-color: #007bff; /* Azul, similar al de "Añadir al carrito" */
+        color: white;
+        padding: 10px 15px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        transition: background-color 0.2s;
+        
+    }
+    
+    .btn-back-home:hover {
+        background-color: #0056b3;
+    }
+
 </style>

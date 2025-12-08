@@ -35,10 +35,13 @@
 
 {#if $cart.length > 0}
     <div class="cart-floating-bar">
-        <span>🛒 Tienes <strong>{$cart.length}</strong> productos en el carrito</span>
+        <span>Tienes <strong>{$cart.length}</strong> productos en el carrito</span>
         <a href="#/pedidos" class="btn-ver-carrito">Ver Carrito</a>
     </div>
 {/if}
+<div class="admin-link-container">
+    <a href="#/gestion" class="btn-admin-menu">Gestión de Menú</a>
+</div>
 <h1>Catálogo de Platos</h1>
 
 {#if loading}
@@ -131,5 +134,25 @@
     }
     button:active {
         background-color: #0056b3; /* Color al hacer click */
+    }
+
+    .admin-link-container {
+        text-align: right;
+        margin-bottom: 20px; 
+    }
+
+    .btn-admin-menu {
+        background-color: #ffc107; /* Amarillo, similar al de edición */
+        color: #333;
+        padding: 10px 15px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        transition: background-color 0.2s;
+    }
+
+    .btn-admin-menu:hover {
+        background-color: #e0a800;
     }
 </style>
