@@ -2,14 +2,13 @@
     import { getPlatosDisponibles } from "../../api/plato.js";
     import { addToCart, cart } from "../../stores/cartStore.js";
     import { onMount } from "svelte";
-    // NOTE: Eliminamos la importación de goto ya que usamos <a> href="#/ruta"
 
     let platos = [];
     let loading = true;
     let error = null;
 
     let cartSize;
-    cart.subscribe(value => {
+    cart.subscribe((value) => {
         cartSize = value.length;
     });
 
@@ -19,7 +18,8 @@
         try {
             platos = await getPlatosDisponibles();
         } catch (e) {
-            error = "No se pudo conectar al servidor de menú. Asegúrate que Spring Boot esté corriendo en el puerto 8080.";
+            error =
+                "No se pudo conectar al servidor de menú. Asegúrate que Spring Boot esté corriendo en el puerto 8080.";
             console.error("Error al cargar platos:", e);
         } finally {
             loading = false;
@@ -29,59 +29,50 @@
     function handleAddToCart(plato) {
         addToCart(plato);
     }
-    
+
     onMount(() => {
         cargarPlatos();
     });
 </script>
 
 <div class="home-container">
-    
     <div class="header-buttons">
-        
         <div class="admin-group">
-            
-            <a href="#/admin/usuarios" class="btn btn-admin-users">
-                ⚙️ Administrar Usuarios
-            </a>
-            
-            <a href="#/gestion" class="btn btn-admin-menu">
-                📝 Gestión de Menú
-            </a>
+            <a href="#/admin/usuarios" class="btn btn-admin-users">Administrar Usuarios</a>
+            <a href="#/gestion" class="btn btn-admin-menu"> Gestión de Menú </a>
+            <a href="#/login" class="btn btn-login"> Login </a>
         </div>
 
         {#if cartSize > 0}
             <a href="#/pedidos" class="btn btn-carrito">
-                🛒 Ver Carrito ({cartSize})
+                Ver Carrito ({cartSize})
             </a>
         {/if}
     </div>
 
     <h1>Catálogo de Platos</h1>
 
-{#if loading}
-    <p>Cargando menú desde el servidor...</p>
-{:else if error}
-    <p style="color: red; font-weight: bold;">ERROR DE CONEXIÓN: {error}</p>
-{:else if platos.length === 0}
-    <p>No hay platos disponibles en este momento.</p>
-{:else}
-    <div class="catalogo-grid">
-        {#each platos as plato}
- 
-            <div class="plato-card">
-                <h3>{plato.nombre}</h3>
-                <p>{plato.descripcion}</p>
-                <p class="precio">Precio: ${plato.precioBase.toFixed(2)}</p>
-                
-                <button on:click={() => handleAddToCart(plato)}>
-                    Añadir al carrito
-                </button>
-                
-            </div>
-        {/each}
-    </div>
-{/if}
+    {#if loading}
+        <p>Cargando menú desde el servidor...</p>
+    {:else if error}
+        <p style="color: red; font-weight: bold;">ERROR DE CONEXIÓN: {error}</p>
+    {:else if platos.length === 0}
+        <p>No hay platos disponibles en este momento.</p>
+    {:else}
+        <div class="catalogo-grid">
+            {#each platos as plato}
+                <div class="plato-card">
+                    <h3>{plato.nombre}</h3>
+                    <p>{plato.descripcion}</p>
+                    <p class="precio">Precio: ${plato.precioBase.toFixed(2)}</p>
+
+                    <button on:click={() => handleAddToCart(plato)}>
+                        Añadir al carrito
+                    </button>
+                </div>
+            {/each}
+        </div>
+    {/if}
 </div>
 
 <style>
@@ -89,9 +80,9 @@
     /* ESTILOS DE DISTRIBUCIÓN (NUEVOS) */
     /* ----------------------------------- */
     .header-buttons {
-        /* Usa Flexbox para distribuir elementos (Izquierda vs Derecha) */
+        /* Usa Flexbox para distribuir elementos */
         display: flex;
-        justify-content: space-between; 
+        justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
         padding: 10px 0;
@@ -104,7 +95,7 @@
         gap: 10px;
     }
 
-    /* Estilos generales para enlaces que actúan como botones (respeta el padding y border-radius) */
+    /* Estilos generales para enlaces que actúan como botones*/
     .btn {
         padding: 10px 15px;
         border: none;
@@ -116,10 +107,15 @@
         white-space: nowrap;
         display: inline-block;
     }
-    
+
     /* Estilos de color para el NUEVO botón de Administrar Usuarios */
     .btn-admin-users {
         background-color: #ffaa00;
+        color: white;
+    }
+
+    .btn-login {
+        background-color: #d01111;
         color: white;
     }
 
@@ -128,7 +124,7 @@
         background-color: #007bff;
         color: white;
     }
-    
+
     /* Estilos del botón de Carrito */
     .btn-carrito {
         background-color: #28a745;
@@ -138,14 +134,14 @@
     .btn:hover {
         opacity: 0.9;
     }
-    
-    /* Ocultamos los elementos flotantes/contenedores que causaban conflicto */
-    .cart-floating-bar, .admin-link-container {
+
+    .cart-floating-bar,
+    .admin-link-container {
         display: none !important;
     }
 
     /* ----------------------------------- */
-    /* TUS ESTILOS ORIGINALES (Asegurando la estética) */
+    /* TUS ESTILOS ORIGINALES*/
     /* ----------------------------------- */
     .home-container {
         padding: 20px;
