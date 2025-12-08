@@ -38,8 +38,6 @@ export async function registrarUsuario(user) {
 /**
  * Inicia sesión en la aplicación.
  * 
- * Guarda un token placeholder y datos del usuario en `localStorage`,
- * ya que el backend aún no genera JWT real.
  *
  * @async
  * @function loginUsuario
@@ -114,8 +112,6 @@ export function getUsuarioId() {
 /**
  * Realiza una petición HTTP autenticada usando el token almacenado.
  * 
- * Aunque el token es falso, permite mantener la estructura
- * del frontend antes de implementar seguridad real en el backend.
  *
  * @async
  * @function authFetch
