@@ -28,3 +28,39 @@ export async function getPlatosDisponibles() {
         throw error;
     }
 }
+
+export async function getTodosLosPlatos() {
+    const res = await fetch(BASE_URL); // GET /api/platos
+    if (!res.ok) throw new Error('Error al cargar platos');
+    return await res.json();
+}
+
+export async function crearPlato(plato) {
+    const res = await fetch(BASE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(plato)
+    });
+    if (!res.ok) throw new Error('Error al crear plato');
+    return await res.json();
+}
+
+export async function actualizarPlato(id, plato) {
+    const res = await fetch(`${BASE_URL}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(plato)
+    });
+    if (!res.ok) throw new Error('Error al actualizar plato');
+    return await res.json();
+}
+
+export async function eliminarPlato(id) {
+    const res = await fetch(`${BASE_URL}/${id}`, {
+        method: 'DELETE'
+    });
+    if (!res.ok) throw new Error('Error al eliminar plato');
+    return true;
+}
+
+
