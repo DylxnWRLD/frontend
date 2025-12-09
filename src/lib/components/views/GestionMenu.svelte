@@ -1,17 +1,24 @@
 <script>
+
     import { getTodosLosPlatos, crearPlato, actualizarPlato, eliminarPlato } from '../../api/plato.js';
     import { onMount } from 'svelte';
 
     let platos = [];
-    // Modelo base para el formulario
     let formPlato = { id: null, nombre: '', descripcion: '', precioBase: 0, disponible: true };
     let modoEdicion = false;
 
-    // Cargar datos al iniciar
+    /**
+     * Carga los platos al montar el componente
+     * @returns {Promise<void>}
+    */
     onMount(async () => {
         await cargarPlatos();
     });
 
+    /**
+     * Carga todos los platos desde la API
+     * @returns {Promise<void>} 
+     */
     async function cargarPlatos() {
         try {
             platos = await getTodosLosPlatos();
@@ -19,8 +26,10 @@
             alert(e.message);
         }
     }
-
-    // Maneja tanto Guardar Nuevo como Guardar Cambios
+    /**
+     * Guarda un nuevo plato o actualiza uno existente según el modo de edición
+     * @returns {Promise<void>} 
+     */
     async function guardar() {
         try {
             if (modoEdicion) {
@@ -37,6 +46,10 @@
         }
     }
 
+    /**
+     * Elimina un plato por su ID
+     * @param id
+     */
     async function borrar(id) {
         if (confirm('¿Estás seguro de eliminar este plato?')) {
             try {
@@ -48,11 +61,19 @@
         }
     }
 
-    // Pone el formulario en modo edición y carga los datos del plato seleccionado
+    /**
+     * Pone el formulario en modo edición y carga los datos del plato seleccionado
+     * @param {Object} plato - El plato a editar
+     * 
+    */
     function editar(plato) {
         formPlato = { ...plato };
+        modoEdicion = true;
     }
 
+    /**
+     * Limpia el formulario y resetea el modo de edición
+     */
     function limpiarFormulario() {
         formPlato = { id: null, nombre: '', descripcion: '', precioBase: 0, disponible: true };
         modoEdicion = false;
@@ -125,7 +146,6 @@
 
 <style>
     .contenedor-admin { max-width: 900px; margin: 0 auto; padding: 20px; font-family: sans-serif; }
-    
     /* Estilos del Formulario */
     .panel-formulario { background: #f4f4f4; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #ddd; }
     input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
