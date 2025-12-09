@@ -1,7 +1,9 @@
 
-const BASE_URL = 'https://backend-production-5953e.up.railway.app//api/pedidos';
+const BASE_URL = 'https://backend-production-5953e.up.railway.app/api/pedidos';
+
 //const BASE_URL = 'http://localhost:8080/api/pedidos';
-import { authFetch } from './usuario.js'; // Usamos el fetch autenticado
+
+import { authFetch } from './usuario.js';
 
 /**
  * Crea un nuevo pedido

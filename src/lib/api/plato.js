@@ -1,6 +1,6 @@
 
-//const BASE_URL = 'https://backend-production-12f1.up.railway.app/api/platos';
-const BASE_URL = 'http://localhost:8080/api/platos';
+const BASE_URL = 'https://backend-production-5953e.up.railway.app/api/pedidos';
+// const BASE_URL = 'http://localhost:8080/api/platos';
 
 
 /**
