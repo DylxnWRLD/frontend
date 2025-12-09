@@ -107,6 +107,9 @@ Probar en el navegador con:
 Debemos de hacer cambio de URL en los archivos de la carpeta src/lib/api/ se pone la URL que se obtiene desde Railway en vez de la de localhost.
 -
 
+Tenemos que hacer en bash dentro de la carpeta de front, que toma todo el código fuente y lo convierte en archivos optimizados listos para producción
+-
+	npm run build
 
 Luego simplemente hacemos desde bash:
 -
