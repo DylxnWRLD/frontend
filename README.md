@@ -1,43 +1,127 @@
-# Svelte + Vite
+CÓMO CORRER EN LOCAL
+-
+1. Crear una carpeta raíz con el nombre de Proyecto.
+2. Dentro crear las carpeta de frontend.
+3. Clonar los repositorios en la respectiva carpeta:
+	- Para frontend: git clone https://github.com/DylxnWRLD/frontend
 
-This template should help get you started developing with Svelte in Vite.
+Estando en la carpeta de raíz para que pueda encontrar el Dockerfile:
+-
+	docker build -t app-frontend ./frontend
 
-## Recommended IDE Setup
+Estando en la carpeta de frontend:
+-
+	rm -rf node_modules package-lock.json
+	npm install svelte-spa-router
+	npm install svelte@4 --legacy-peer-deps
+	npm install
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
 
-## Need an official Svelte framework?
+Estando en el directorio raíz:
+NOTA: CAMBIAR LA DIRECCIÓN DEL VOLUMEN POR LA DE USTEDES.
+Ejecutar en este orden:
+-
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+PARA EL FRONTEND:
+La primera vez:
+-
+    docker run -it --rm \
+      --name svelte_frontend_dev \
+      -p 5173:5173 \
+      -p 24678:24678 \
+      -e VITE_API_URL=http://host.docker.internal:8080/api \
+      -v "C:\Users\laura\Proyecto Restaurante\frontend":/app-source \
+      app-frontend sh
 
-## Technical considerations
+Y luego:
+-
+    cd /app-source
+    npm install
+    npm run dev -- --host 0.0.0.0
 
-**Why use this over SvelteKit?**
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+Las demás veces:
+-
+     docker run -it --rm \
+      --name svelte_frontend_dev \
+      -p 5173:5173 \
+      -p 24678:24678 \
+      -e VITE_API_URL=http://host.docker.internal:8080/api \
+      -v "C:\Users\laura\Proyecto Restaurante\frontend":/app-source \
+      app-frontend
 
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+Probar en el navegador con:
+- 
+    http://localhost:5173/
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
 
-**Why include `.vscode/extensions.json`?**
+  CÓMO DESPLEGARLO
+  - 
+  1. Primero debemos de crear un .yml para desplegar con GitHub. El contenido del mismo es el siguiente:
+     -
+	name: Deploy Svelte SPA to GitHub Pages
+		on:
+	 	 push:
+	  	  branches: ["main"]
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+	permissions:
+	  contents: read
+ 	 pages: write
+ 	 id-token: write
 
-**Why enable `checkJs` in the JS template?**
+	jobs:
+  	build:
+   	 runs-on: ubuntu-latest
+   	 steps:
+   	   - uses: actions/checkout@v4
 
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
+     	 - uses: actions/setup-node@v4
+     	   with:
+      	    node-version: 20
+       	   cache: npm
 
-**Why is HMR not preserving my local component state?**
+    	  - name: Install dependencies
+    	    run: npm install
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
+    	  - name: Build project
+    	    run: npm run build
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+    	  - uses: actions/configure-pages@v5
 
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+    	  - name: Upload artifact
+     	   uses: actions/upload-pages-artifact@v3
+     	   with:
+      	    path: dist
+
+  		deploy:
+    		needs: build
+    		runs-on: ubuntu-latest
+    		environment:
+      		name: github-pages
+      		url: ${{ steps.deployment.outputs.page_url }}
+   		 steps:
+    		- name: Deploy to GitHub Pages
+     	  	 id: deployment
+      	 	 uses: actions/deploy-pages@v4
+
+Debemos de hacer cambio de URL en los archivos de la carpeta src/lib/api/ se pone la URL que se obtiene desde Railway en vez de la de localhost.
+-
+
+
+Luego simplemente hacemos desde bash:
+-
+	git add .
+	git commit -m "Despliegue del front"
+	git push
+
+Esperamos unos 3 minnutos y podremos acceder para observar el front:
+-
+	https://dylxnwrld.github.io/frontend/
+
+
+
+
+
+    
+  
+

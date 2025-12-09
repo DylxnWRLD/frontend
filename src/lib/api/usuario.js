@@ -1,7 +1,7 @@
 // src/lib/api/usuario.js
 
-// const BASE_URL = 'https://backend-production-12f1.up.railway.app/api/usuarios';
-const BASE_URL = 'http://localhost:8080/api/usuarios';
+const BASE_URL = 'https://backend-production-5953e.up.railway.app//api/usuarios';
+// const BASE_URL = 'http://localhost:8080/api/usuarios';
 
 /**
  * Registra un nuevo usuario en el sistema.
@@ -38,8 +38,6 @@ export async function registrarUsuario(user) {
 /**
  * Inicia sesión en la aplicación.
  * 
- * Guarda un token placeholder y datos del usuario en `localStorage`,
- * ya que el backend aún no genera JWT real.
  *
  * @async
  * @function loginUsuario
@@ -61,9 +59,9 @@ export async function loginUsuario(credentials) {
             const errorBody = await res.json();
             throw new Error(errorBody.message || 'Error en login');
         }
-        
+
         const data = await res.json();
-        
+
         // Si el backend envía un ID, guardamos "token" y datos mínimos del usuario
         if (data.id) {
             localStorage.setItem('token', 'sesion-activa-placeholder');
@@ -114,8 +112,6 @@ export function getUsuarioId() {
 /**
  * Realiza una petición HTTP autenticada usando el token almacenado.
  * 
- * Aunque el token es falso, permite mantener la estructura
- * del frontend antes de implementar seguridad real en el backend.
  *
  * @async
  * @function authFetch
@@ -143,4 +139,64 @@ export async function authFetch(url, options = {}) {
     }
 
     return res.json();
+}
+
+// --- NUEVAS FUNCIONES CRUD A AÑADIR ---
+
+/**
+ * Obtiene el listado completo de usuarios del sistema (Admin GET).
+ */
+export async function obtenerUsuarios() {
+    try {
+        const response = await fetch(BASE_URL, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Error al obtener la lista de usuarios');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error en obtenerUsuarios:", error);
+        throw error;
+    }
+}
+
+/**
+ * Actualiza los datos de un usuario existente (Admin PUT).
+ */
+export async function actualizarUsuario(id, usuarioDatos) {
+    try {
+        const response = await fetch(`${BASE_URL}/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(usuarioDatos)
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || `Error al actualizar el usuario con ID ${id}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error en actualizarUsuario:", error);
+        throw error;
+    }
+}
+
+/**
+ * Elimina un usuario por su ID (Admin DELETE).
+ */
+export async function eliminarUsuario(id) {
+    try {
+        const response = await fetch(`${BASE_URL}/${id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) {
+            throw new Error(`Error al eliminar el usuario con ID ${id}. Código: ${response.status}`);
+        }
+    } catch (error) {
+        console.error("Error en eliminarUsuario:", error);
+        throw error;
+    }
 }
