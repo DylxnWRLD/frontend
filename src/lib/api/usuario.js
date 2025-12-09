@@ -23,7 +23,7 @@ export async function registrarUsuario(user) {
 
         if (!res.ok) {
             const errorBody = await res.json();
-            throw new Error(errorBody.message || 'Error al registrar usuario');
+            throw new Error(errorBody.message);
         }
 
         return await res.json();
