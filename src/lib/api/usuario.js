@@ -23,7 +23,7 @@ export async function registrarUsuario(user) {
 
         if (!res.ok) {
             const errorBody = await res.json();
-            throw new Error(errorBody.message);
+            throw new Error('Error en registro');
         }
 
         return await res.json();
@@ -52,21 +52,16 @@ export async function loginUsuario(credentials) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(credentials)
         });
-
         if (!res.ok) {
             const errorBody = await res.json();
-            throw new Error(errorBody.message || 'Error en login');
+            throw new Error('Error en login');
         }
-
         const data = await res.json();
-
-        // Si el backend envía un ID, guardamos "token" y datos mínimos del usuario
         if (data.id) {
             localStorage.setItem('token', 'sesion-activa-placeholder');
             localStorage.setItem('usuarioId', data.id);
             localStorage.setItem('usuarioNombre', data.nombre);
         }
-
         return data;
     } catch (err) {
         console.error('Error en login:', err);
